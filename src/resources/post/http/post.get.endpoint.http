@@ -1,0 +1,4 @@
+## Post request for post controller
+
+GET http://localhost:3000/post
+                              
