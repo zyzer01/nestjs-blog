@@ -13,6 +13,7 @@ import { TagService } from '../tag/tag.service';
 import { ConfigService } from '@nestjs/config';
 import { GetPostsDto } from './dto/get-posts.dto';
 import { PaginationProvider } from 'src/common/pagination/provider/pagination.provider';
+import { Paginated } from 'src/common/pagination/interfaces/paginated.interface';
 
 /**
  * Post Service (Manages all operations related to posts)
@@ -56,7 +57,7 @@ export class PostService {
   /**
    * Find all posts
    */
-  public findAll(postquery: GetPostsDto) {
+  public findAll(postquery: GetPostsDto): Promise<Paginated<Post>> {
     const env = this.configService.get('NODE_ENV');
     console.log(env);
     const posts = this.paginationProvider.paginateQuery(
