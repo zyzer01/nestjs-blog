@@ -241,9 +241,11 @@
 import { PostService } from &#x27;./post.service&#x27;;
 import { PostController } from &#x27;./post.controller&#x27;;
 import { UserModule } from &#x27;../user/user.module&#x27;;
+import { TypeOrmModule } from &#x27;@nestjs/typeorm&#x27;;
+import { Post } from &#x27;./entities/post.entity&#x27;;
 
 @Module({
-  imports: [UserModule],
+  imports: [UserModule, TypeOrmModule.forFeature([Post])],
   controllers: [PostController],
   providers: [PostService],
 })

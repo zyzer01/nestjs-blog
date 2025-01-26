@@ -1,8 +1,15 @@
 import { GetUserParamsDto } from './dto/get-user-params.dto';
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  forwardRef,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { AuthService } from '../auth/auth.service';
-
+import { Repository } from 'typeorm';
+import { User } from './user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 /**
  * User Service (Manages all operations related to users)
  */
@@ -12,6 +19,9 @@ export class UserService {
   constructor(
     @Inject(forwardRef(() => AuthService))
     private readonly authService: AuthService,
+
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
   ) {}
 
   /**
@@ -20,8 +30,22 @@ export class UserService {
    * @returns
    */
 
-  createUser(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  public async createUser(createUserDto: CreateUserDto) {
+    const existingUser = await this.userRepository.findOne({
+      where: {
+        email: createUserDto.email,
+      },
+    });
+
+    if (existingUser) {
+      throw new ConflictException('User already exists');
+    }
+
+    let newUser = await this.userRepository.create(createUserDto);
+
+    newUser = await this.userRepository.save(newUser);
+
+    return newUser;
   }
 
   /**
@@ -71,11 +95,7 @@ export class UserService {
    * @returns a single user
    */
 
-  public findOne(id: string) {
-    return {
-      id: 1,
-      name: 'John Doe',
-      age: 25,
-    };
+  public async findOneById(id: number) {
+    return await this.userRepository.findOneBy({ id });
   }
 }

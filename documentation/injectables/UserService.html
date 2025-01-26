@@ -143,6 +143,8 @@
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
+                                    <span class="modifier">Public</span>
+                                    <span class="modifier">Async</span>
                                 <a href="#createUser" >createUser</a>
                             </li>
                             <li>
@@ -174,12 +176,12 @@
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(authService: <a href="../injectables/AuthService.html" target="_self">AuthService</a>)</code>
+<code>constructor(authService: <a href="../injectables/AuthService.html" target="_self">AuthService</a>, userRepository: Repository<User>)</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="11" class="link-to-prism">src/resources/user/user.service.ts:11</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="19" class="link-to-prism">src/resources/user/user.service.ts:19</a></div>
                             </td>
                         </tr>
 
@@ -208,6 +210,18 @@
                                                     </td>
                                                     
                                                 </tr>
+                                                <tr>
+                                                        <td>userRepository</td>
+                                                  
+                                                        <td>
+                                                                    <code>Repository&lt;User&gt;</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
                                         </tbody>
                                     </table>
                             </div>
@@ -228,6 +242,8 @@
                 <td class="col-md-4">
                     <a name="createUser"></a>
                     <span class="name">
+                            <span class="modifier">Public</span>
+                            <span class="modifier">Async</span>
                         <span ><b>createUser</b></span>
                         <a href="#createUser"><span class="icon ion-ios-link"></span></a>
                     </span>
@@ -235,15 +251,16 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>createUser(createUserDto: <a href="../classes/CreateUserDto.html" target="_self">CreateUserDto</a>)</code>
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>createUser(createUserDto: <a href="../classes/CreateUserDto.html" target="_self">CreateUserDto</a>)</code>
                 </td>
             </tr>
 
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="23"
-                                    class="link-to-prism">src/resources/user/user.service.ts:23</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="34"
+                                    class="link-to-prism">src/resources/user/user.service.ts:34</a></div>
                         </td>
                     </tr>
 
@@ -279,7 +296,7 @@
                                 </table>
                             </div>
                         <div class="io-description">
-                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                            <b>Returns : </b>    <code>unknown</code>
 
                         </div>
                             <div class="io-description">
@@ -311,8 +328,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="42"
-                                    class="link-to-prism">src/resources/user/user.service.ts:42</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="67"
+                                    class="link-to-prism">src/resources/user/user.service.ts:67</a></div>
                         </td>
                     </tr>
 
@@ -405,8 +422,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="74"
-                                    class="link-to-prism">src/resources/user/user.service.ts:74</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="99"
+                                    class="link-to-prism">src/resources/user/user.service.ts:99</a></div>
                         </td>
                     </tr>
 
@@ -473,8 +490,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="32"
-                                    class="link-to-prism">src/resources/user/user.service.ts:32</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="57"
+                                    class="link-to-prism">src/resources/user/user.service.ts:57</a></div>
                         </td>
                     </tr>
 
@@ -501,9 +518,17 @@
 
     <div class="tab-pane fade  tab-source-code" id="source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { GetUserParamsDto } from &#x27;./dto/get-user-params.dto&#x27;;
-import { forwardRef, Inject, Injectable } from &#x27;@nestjs/common&#x27;;
+import {
+  ConflictException,
+  forwardRef,
+  Inject,
+  Injectable,
+} from &#x27;@nestjs/common&#x27;;
 import { CreateUserDto } from &#x27;./dto/create-user.dto&#x27;;
 import { AuthService } from &#x27;../auth/auth.service&#x27;;
+import { Repository } from &#x27;typeorm&#x27;;
+import { User } from &#x27;./user.entity&#x27;;
+import { InjectRepository } from &#x27;@nestjs/typeorm&#x27;;
 
 /**
  * User Service (Manages all operations related to users)
@@ -514,6 +539,9 @@ export class UserService {
   constructor(
     @Inject(forwardRef(() &#x3D;&gt; AuthService))
     private readonly authService: AuthService,
+
+    @InjectRepository(User)
+    private userRepository: Repository&lt;User&gt;,
   ) {}
 
   /**
@@ -522,8 +550,22 @@ export class UserService {
    * @returns
    */
 
-  createUser(createUserDto: CreateUserDto) {
-    return &#x27;This action adds a new user&#x27;;
+  public async createUser(createUserDto: CreateUserDto) {
+    const existingUser &#x3D; await this.userRepository.findOne({
+      where: {
+        email: createUserDto.email,
+      },
+    });
+
+    if (existingUser) {
+      throw new ConflictException(&#x27;User already exists&#x27;);
+    }
+
+    let newUser &#x3D; await this.userRepository.create(createUserDto);
+
+    newUser &#x3D; await this.userRepository.save(newUser);
+
+    return newUser;
   }
 
   /**

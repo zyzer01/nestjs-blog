@@ -2,6 +2,11 @@ PATCH http://localhost:3000/post/123
 Content-Type: application/json
 
 {
-    "id": 222,
-    "title": "Post Title"
+    "id": 6,
+    "title": "New Title",
+    "content": "Post Content",
+    "postType": "post",
+    "slug": "ewrw",
+    "status": "published",
+    "tags": [1,2]
 }

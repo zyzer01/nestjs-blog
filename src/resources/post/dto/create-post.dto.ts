@@ -1,20 +1,22 @@
 import {
   IsArray,
   IsEnum,
+  IsInt,
   IsISO8601,
   IsJSON,
   IsNotEmpty,
   IsOptional,
   IsString,
   Matches,
+  MaxLength,
   MinLength,
   ValidateNested,
 } from 'class-validator';
 import { PostType } from '../enum/post-type.enum';
 import { PostStatus } from '../enum/post-status.enum';
-import { CreatePostMetaOptionDto } from './create-post-meta-options.dto';
 import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { CreateMetaOptionDto } from 'src/resources/meta-option/dto/create-meta-option.dto';
 
 export class CreatePostDto {
   @ApiProperty({
@@ -58,6 +60,7 @@ export class CreatePostDto {
     example: 'my-first-post',
   })
   @IsString()
+  @MaxLength(256)
   @Matches(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, {
     message:
       'Slug must be kebab-case (all small letters and uses "-" without spaces)',
@@ -80,6 +83,7 @@ export class CreatePostDto {
   })
   @IsString()
   @IsOptional()
+  @MaxLength(1024)
   featuredImage?: string;
 
   @ApiPropertyOptional({
@@ -91,38 +95,37 @@ export class CreatePostDto {
   publishedOn?: Date;
 
   @ApiPropertyOptional({
-    description: 'The tags of the post',
-    example: ['tag1', 'tag2', 'tag3'],
+    description: 'The array of ids of tags of the post',
+    example: [1, 2],
   })
-  @IsString({ each: true })
+  @IsInt({ each: true })
   @IsOptional()
   @IsArray()
-  @MinLength(3, { each: true })
-  tags?: string[];
+  tags?: number[];
+
+  @ApiProperty({
+    type: 'integer',
+    required: true,
+    description: 'The ID of the post author',
+    example: 6,
+  })
+  @IsInt()
+  authorId: number;
 
   @ApiPropertyOptional({
     description: 'The meta options of the post',
-    type: 'array',
-    items: {
-      type: 'object',
-      properties: {
-        key: {
-          type: 'string',
-          description: 'The key of the meta option, it can be any string',
-          example: 'sidebarEnabled',
-        },
-        value: {
-          type: 'string',
-          description:
-            'The value of the meta option, it can be any type of value',
-          example: true,
-        },
+    type: 'object',
+    example: { metaValue: '{"sidebarEnabled": true}' },
+    properties: {
+      metaValue: {
+        type: 'string',
+        description: 'The meta value, it is a JSON string',
+        example: '{"sidebarEnabled": true}',
       },
     },
   })
-  @IsArray()
   @IsOptional()
   @ValidateNested({ each: true })
-  @Type(() => CreatePostMetaOptionDto)
-  metaOptions?: CreatePostMetaOptionDto[];
+  @Type(() => CreateMetaOptionDto)
+  metaOptions?: CreateMetaOptionDto | null;
 }

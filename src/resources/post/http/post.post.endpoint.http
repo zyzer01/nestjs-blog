@@ -7,19 +7,13 @@ Content-Type: application/json
     "content": "Post Content",
     "postType": "post",
     "status": "published",
-    "slug": "post-title",
+    "slug": "post-mioppp",
     "featuredImage": "https://example.com/image.jpg",
     "publishedOn": "2021-01-01T00:00:00.000Z",
-    "tags": ["tag1", "tag2"],
+    "tags": [7],
+    "authorId": 1,
     "schema": "{\r\n    \"@context\": \"https:\/\/schema.org\",\r\n    \"@type\": \"Person\"\r\n  }",
-    "metaOptions": [
-        {
-            "key": "metaKey1",
-            "value": "metaValue1"
-        },
-        {
-            "key": "metaKey2",
-            "value": "metaValue2"
-        }
-    ]
+    "metaOptions": {
+        "metaValue": "{\"sidebarEnable\": true, \"footerActive\": true}"
+    }
 }

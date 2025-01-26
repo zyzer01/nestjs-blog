@@ -21,11 +21,10 @@ export class UserController {
 
   @Post()
   public createUser(@Body() createUserDto: CreateUserDto) {
-    console.log(createUserDto instanceof CreateUserDto);
     return this.userService.createUser(createUserDto);
   }
 
-  @Get('/:id')
+  @Get(':id')
   @ApiOperation({
     summary: 'Get a user by their id',
   })

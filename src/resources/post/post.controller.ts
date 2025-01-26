@@ -6,8 +6,7 @@ import {
   Patch,
   Param,
   Delete,
-  Headers,
-  Ip,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -38,12 +37,12 @@ export class PostController {
 
   @Get('/:userId')
   findOne(@Param('userId') userId?: string) {
-    return this.postService.findAll(userId);
+    return this.postService.findAll();
   }
 
-  @Get('/')
-  findAll(@Param('userId') userId?: string) {
-    return this.postService.findAll(userId);
+  @Get()
+  findAll() {
+    return this.postService.findAll();
   }
 
   @Patch('/:id')
@@ -54,13 +53,13 @@ export class PostController {
     type: CreatePostDto,
   })
   @ApiOperation({ summary: 'Updates a blog post' })
-  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
+  update(@Param('id') id: number, @Body() updatePostDto: UpdatePostDto) {
     console.log(updatePostDto);
-    return this.postService.update(+id, updatePostDto);
+    return this.postService.update(id, updatePostDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.postService.remove(+id);
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.postService.remove(id);
   }
 }

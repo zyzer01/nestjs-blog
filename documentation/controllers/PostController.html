@@ -212,8 +212,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="29"
-                                    class="link-to-prism">src/resources/post/post.controller.ts:29</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="27"
+                                    class="link-to-prism">src/resources/post/post.controller.ts:27</a></div>
                         </td>
                     </tr>
 
@@ -274,7 +274,7 @@
             <tr>
                 <td class="col-md-4">
                         <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>findAll(userId?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                    <code>findAll()</code>
                 </td>
             </tr>
 
@@ -282,14 +282,14 @@
                 <td class="col-md-4">
                     <b>Decorators : </b>
                     <br />
-                    <code>@Get(&#x27;/&#x27;)<br /></code>
+                    <code>@Get()<br /></code>
                 </td>
             </tr>
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="45"
-                                    class="link-to-prism">src/resources/post/post.controller.ts:45</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="43"
+                                    class="link-to-prism">src/resources/post/post.controller.ts:43</a></div>
                         </td>
                     </tr>
 
@@ -297,40 +297,10 @@
             <tr>
                 <td class="col-md-4">
 
-                            <div class="io-description">
-                                <b>Parameters :</b>
-                                
-                                <table class="params">
-                                    <thead>
-                                        <tr>
-                                            <td>Name</td>
-                                                <td>Type</td>
-                                            <td>Optional</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                                <td>userId</td>
-                                            <td>
-                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
-                                            </td>
-
-                                            <td>
-                                                    Yes
-                                            </td>
-
-
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
                         <div class="io-description">
                             <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
 
                         </div>
-                            <div class="io-description">
-                                
-                            </div>
                 </td>
             </tr>
         </tbody>
@@ -364,8 +334,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="40"
-                                    class="link-to-prism">src/resources/post/post.controller.ts:40</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="38"
+                                    class="link-to-prism">src/resources/post/post.controller.ts:38</a></div>
                         </td>
                     </tr>
 
@@ -440,8 +410,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="63"
-                                    class="link-to-prism">src/resources/post/post.controller.ts:63</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="61"
+                                    class="link-to-prism">src/resources/post/post.controller.ts:61</a></div>
                         </td>
                     </tr>
 
@@ -518,8 +488,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="57"
-                                    class="link-to-prism">src/resources/post/post.controller.ts:57</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="55"
+                                    class="link-to-prism">src/resources/post/post.controller.ts:55</a></div>
                         </td>
                     </tr>
 
@@ -589,8 +559,6 @@
   Patch,
   Param,
   Delete,
-  Headers,
-  Ip,
 } from &#x27;@nestjs/common&#x27;;
 import { PostService } from &#x27;./post.service&#x27;;
 import { CreatePostDto } from &#x27;./dto/create-post.dto&#x27;;
@@ -621,12 +589,12 @@ export class PostController {
 
   @Get(&#x27;/:userId&#x27;)
   findOne(@Param(&#x27;userId&#x27;) userId?: string) {
-    return this.postService.findAll(userId);
+    return this.postService.findAll();
   }
 
-  @Get(&#x27;/&#x27;)
-  findAll(@Param(&#x27;userId&#x27;) userId?: string) {
-    return this.postService.findAll(userId);
+  @Get()
+  findAll() {
+    return this.postService.findAll();
   }
 
   @Patch(&#x27;/:id&#x27;)

@@ -274,19 +274,22 @@ import { UserModule } from &#x27;./resources/user/user.module&#x27;;
 import { PostModule } from &#x27;./resources/post/post.module&#x27;;
 import { AuthModule } from &#x27;./resources/auth/auth.module&#x27;;
 import { TypeOrmModule } from &#x27;@nestjs/typeorm&#x27;;
-import { User } from &#x27;./resources/user/user.entity&#x27;;
+import { TagModule } from &#x27;./resources/tag/tag.module&#x27;;
+import { MetaOptionModule } from &#x27;./resources/meta-option/meta-option.module&#x27;;
 
 @Module({
   imports: [
     UserModule,
     PostModule,
     AuthModule,
+    TagModule,
+    MetaOptionModule,
     TypeOrmModule.forRootAsync({
-      imports: [User],
+      imports: [],
       inject: [],
       useFactory: () &#x3D;&gt; ({
         type: &#x27;postgres&#x27;,
-        entities: [],
+        autoLoadEntities: true,
         synchronize: true,
         host: &#x27;localhost&#x27;,
         username: &#x27;zyzer01&#x27;,
