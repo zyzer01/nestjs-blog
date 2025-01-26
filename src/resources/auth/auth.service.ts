@@ -1,18 +1,68 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { HashingProvider } from 'src/resources/auth/provider/hashing.provider';
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+  RequestTimeoutException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UserService } from '../user/user.service';
+import { SignInDto } from './dto/sign-in.dto';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigType } from '@nestjs/config';
+import jwtConfig from 'src/config/jwt.config';
 
 @Injectable()
 export class AuthService {
   constructor(
     @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
+
+    private readonly hashingProvider: HashingProvider,
+
+    private readonly jwtService: JwtService,
+
+    @Inject(jwtConfig.KEY)
+    private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
   ) {}
 
-  public login(email: string, password: string) {
-    // const user = this.userService.findOne(email);
-    // console.log(user);
+  public async signIn(signInDto: SignInDto) {
+    const user = await this.userService.findOneByEmail(signInDto.email);
 
-    return 'TOKEN';
+    let isEqual: boolean = false;
+
+    try {
+      isEqual = await this.hashingProvider.comparePassword(
+        signInDto.password,
+        user.password,
+      );
+    } catch (error) {
+      throw new RequestTimeoutException(
+        'Unable to process your request at the moment',
+        {
+          description: String(error),
+        },
+      );
+    }
+
+    if (!isEqual) {
+      throw new UnauthorizedException('Incorrect password');
+    }
+
+    const accessToken = await this.jwtService.signAsync(
+      {
+        sub: user.id,
+        email: user.email,
+      },
+      {
+        audience: this.jwtConfiguration.audience,
+        issuer: this.jwtConfiguration.issuer,
+        secret: this.jwtConfiguration.secret,
+        expiresIn: this.jwtConfiguration.accessTokenTtl,
+      },
+    );
+
+    return accessToken;
   }
 
   public isAuth() {
