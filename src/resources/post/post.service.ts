@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  RequestTimeoutException,
+} from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UserService } from '../user/user.service';
 import { UpdatePostDto } from './dto/update-post.dto';
@@ -70,9 +74,33 @@ export class PostService {
    */
 
   public async update(id: number, updatePostDto: UpdatePostDto) {
-    const tags = await this.tagService.findMultipleTags(updatePostDto.tags);
+    let tags = undefined;
+    let post = undefined;
 
-    const post = await this.postRepository.findOneBy({ id: updatePostDto.id });
+    try {
+      tags = await this.tagService.findMultipleTags(updatePostDto.tags);
+    } catch (error) {
+      throw new RequestTimeoutException(
+        'Unable to process your request at the moment',
+      );
+    }
+    try {
+      post = await this.postRepository.findOneBy({ id: updatePostDto.id });
+    } catch (error) {
+      throw new RequestTimeoutException(
+        'Unable to process your request at the moment',
+      );
+    }
+
+    if (!tags || tags.length !== updatePostDto.tags.length) {
+      throw new BadRequestException(
+        'Please check the tag ids and ensure they are correct',
+      );
+    }
+
+    if (!post) {
+      throw new BadRequestException('A post with this id was not found');
+    }
 
     post.title = updatePostDto.title ?? post.title;
     post.content = updatePostDto.content ?? post.content;
@@ -84,7 +112,15 @@ export class PostService {
 
     post.tags = tags;
 
-    return await this.postRepository.save(post);
+    try {
+      await this.postRepository.save(post);
+    } catch (error) {
+      throw new RequestTimeoutException(
+        'Unable to process your request at the moment',
+      );
+    }
+
+    return post;
   }
 
   public async remove(id: number) {

@@ -1,9 +1,12 @@
 import { GetUserParamsDto } from './dto/get-user-params.dto';
 import {
-  ConflictException,
+  BadRequestException,
   forwardRef,
+  HttpException,
+  HttpStatus,
   Inject,
   Injectable,
+  RequestTimeoutException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { AuthService } from '../auth/auth.service';
@@ -31,19 +34,33 @@ export class UserService {
    */
 
   public async createUser(createUserDto: CreateUserDto) {
-    const existingUser = await this.userRepository.findOne({
-      where: {
-        email: createUserDto.email,
-      },
-    });
+    let existingUser = undefined;
+
+    try {
+      existingUser = await this.userRepository.findOne({
+        where: {
+          email: createUserDto.email,
+        },
+      });
+    } catch (error) {
+      throw new RequestTimeoutException(
+        'Unable to process your request at the moment',
+      );
+    }
 
     if (existingUser) {
-      throw new ConflictException('User already exists');
+      throw new BadRequestException('User already exists');
     }
 
     let newUser = await this.userRepository.create(createUserDto);
 
-    newUser = await this.userRepository.save(newUser);
+    try {
+      newUser = await this.userRepository.save(newUser);
+    } catch (error) {
+      throw new RequestTimeoutException(
+        'Unable to process your request at the moment',
+      );
+    }
 
     return newUser;
   }
@@ -68,25 +85,19 @@ export class UserService {
     limit: number,
     page: number,
   ) {
-    const isAuth = this.authService.isAuth();
-    console.log(isAuth);
-    return [
+    throw new HttpException(
       {
-        id: 1,
-        name: 'John Doe',
-        age: 25,
+        status: HttpStatus.MOVED_PERMANENTLY,
+        error: 'The api endpoint does not exist',
+        file: 'user.service.ts',
+        linNumber: 88,
       },
+      HttpStatus.MOVED_PERMANENTLY,
       {
-        id: 2,
-        name: 'Jane Doe',
-        age: 26,
+        cause: new Error(),
+        description: 'Occured because api endoint was moved',
       },
-      {
-        id: 3,
-        name: 'Alice',
-        age: 30,
-      },
-    ];
+    );
   }
 
   /**
@@ -96,6 +107,18 @@ export class UserService {
    */
 
   public async findOneById(id: number) {
-    return await this.userRepository.findOneBy({ id });
+    let user = undefined;
+    try {
+      user = await this.userRepository.findOneBy({ id });
+    } catch (error) {
+      throw new RequestTimeoutException(
+        'Unable to process your request at the moment',
+      );
+    }
+
+    if (!user) {
+      throw new BadRequestException('User with this id was not found');
+    }
+    return user;
   }
 }

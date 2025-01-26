@@ -24,7 +24,7 @@ export class UserController {
     return this.userService.createUser(createUserDto);
   }
 
-  @Get(':id')
+  @Get()
   @ApiOperation({
     summary: 'Get a user by their id',
   })
