@@ -8,3 +8,23 @@ Content-Type: application/json
     "email": "devzyzerr@gmail.com",
     "password": "2Password"
 }
+
+
+POST http://localhost:3000/users/create-many
+Content-Type: application/json
+{
+    "users": [
+    {
+        "firstName": "Joe",
+        "lastName": "Meatle",
+        "email": "devzyr@gmail.com",
+        "password": "2Password"
+    },
+    {
+        "firstName": "Fola",
+        "lastName": "Stag",
+        "email": "devr@gmail.com",
+        "password": "2Password"
+    }
+    ]
+}

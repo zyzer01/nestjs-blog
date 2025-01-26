@@ -8,6 +8,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TagModule } from './resources/tag/tag.module';
 import { MetaOptionModule } from './resources/meta-option/meta-option.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { PaginationModule } from './common/pagination/pagination.module';
 import appConfig from './config/app.config';
 import databaseConfig from './config/database.config';
 import environmentValidation from './config/environment.validation';
@@ -41,6 +42,7 @@ const ENV = process.env.NODE_ENV;
         port: configService.get('database.port'),
       }),
     }),
+    PaginationModule,
   ],
   controllers: [AppController],
   providers: [AppService],

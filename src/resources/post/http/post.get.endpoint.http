@@ -1,4 +1,9 @@
 ## Post request for post controller
-
-GET http://localhost:3000/post
-                              
+{{
+    const date = new Date();
+    exports.startDate = date.toString();
+    exports.endDate = date.toString();
+}}
+GET http://localhost:3000/post/
+?limit=1
+&page=2                             

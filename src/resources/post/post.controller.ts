@@ -7,11 +7,13 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { GetPostsDto } from './dto/get-posts.dto';
 
 @Controller('post')
 export class PostController {
@@ -35,15 +37,15 @@ export class PostController {
   //   return this.postService.findAll();
   // }
 
-  @Get('/:userId')
-  findOne(@Param('userId') userId?: string) {
-    return this.postService.findAll();
+  @Get()
+  findOne(@Query() postquery?: GetPostsDto) {
+    return this.postService.findAll(postquery);
   }
 
-  @Get()
-  findAll() {
-    return this.postService.findAll();
-  }
+  // @Get()
+  // findAll() {
+  //   return this.postService.findAll();
+  // }
 
   @Patch('/:id')
   @ApiResponse({

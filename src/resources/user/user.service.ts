@@ -1,3 +1,4 @@
+import { UserCreateManyProvider } from './provider/user-create-many.provider';
 import { GetUserParamsDto } from './dto/get-user-params.dto';
 import {
   BadRequestException,
@@ -13,6 +14,7 @@ import { AuthService } from '../auth/auth.service';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CreateManyUsersDto } from './dto/create-many-users.dto';
 /**
  * User Service (Manages all operations related to users)
  */
@@ -22,6 +24,12 @@ export class UserService {
   constructor(
     @Inject(forwardRef(() => AuthService))
     private readonly authService: AuthService,
+
+    /**
+     * Inject createManyUsers Provider
+     */
+
+    private readonly userCreateManyProvider: UserCreateManyProvider,
 
     @InjectRepository(User)
     private userRepository: Repository<User>,
@@ -120,5 +128,9 @@ export class UserService {
       throw new BadRequestException('User with this id was not found');
     }
     return user;
+  }
+
+  public async createMany(createManyUsersDto: CreateManyUsersDto) {
+    return await this.userCreateManyProvider.createMany(createManyUsersDto);
   }
 }

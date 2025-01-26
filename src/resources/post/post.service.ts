@@ -11,6 +11,8 @@ import { Post } from './entities/post.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TagService } from '../tag/tag.service';
 import { ConfigService } from '@nestjs/config';
+import { GetPostsDto } from './dto/get-posts.dto';
+import { PaginationProvider } from 'src/common/pagination/provider/pagination.provider';
 
 /**
  * Post Service (Manages all operations related to posts)
@@ -28,6 +30,8 @@ export class PostService {
     private readonly configService: ConfigService,
 
     private readonly tagService: TagService,
+
+    private readonly paginationProvider: PaginationProvider,
 
     private readonly userService: UserService,
   ) {}
@@ -52,12 +56,16 @@ export class PostService {
   /**
    * Find all posts
    */
-  public findAll() {
+  public findAll(postquery: GetPostsDto) {
     const env = this.configService.get('NODE_ENV');
     console.log(env);
-    const posts = this.postRepository.find({
-      relations: ['metaOptions', 'author', 'tags'],
-    });
+    const posts = this.paginationProvider.paginateQuery(
+      {
+        limit: postquery.limit,
+        page: postquery.page,
+      },
+      this.postRepository,
+    );
 
     return posts;
   }

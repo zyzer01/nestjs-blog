@@ -14,6 +14,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
+import { CreateManyUsersDto } from './dto/create-many-users.dto';
 
 @Controller('users')
 export class UserController {
@@ -22,6 +23,11 @@ export class UserController {
   @Post()
   public createUser(@Body() createUserDto: CreateUserDto) {
     return this.userService.createUser(createUserDto);
+  }
+
+  @Post('create-many')
+  public createManyUsers(@Body() createManyUsersDto: CreateManyUsersDto) {
+    return this.userService.createMany(createManyUsersDto);
   }
 
   @Get()

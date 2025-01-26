@@ -3,11 +3,11 @@ POST http://localhost:3000/post
 Content-Type: application/json
 
 {
-    "title": "Post Title",
-    "content": "Post Content",
+    "title": "Tice Post",
+    "content": "Nice Post Content",
     "postType": "post",
     "status": "published",
-    "slug": "post-mioppp",
+    "slug": "post-tice",
     "featuredImage": "https://example.com/image.jpg",
     "publishedOn": "2021-01-01T00:00:00.000Z",
     "tags": [7],
