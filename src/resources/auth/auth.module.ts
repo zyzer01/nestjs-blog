@@ -7,8 +7,9 @@ import { BcryptProvider } from './providers/bcrypt.provider';
 import { ConfigModule } from '@nestjs/config';
 import jwtConfig from '../../config/jwt.config';
 import { JwtModule } from '@nestjs/jwt';
-import { SignIn } from './providers/sign-in';
-import { GenerateAuthTokens } from './providers/generate-auth-tokens';
+import { SignInProvider } from './providers/sign-in.provider';
+import { GenerateAuthTokensProvider } from './providers/generate-auth-tokens.provider';
+import { RefreshTokensProvider } from './providers/refresh-tokens.provider';
 
 @Module({
   controllers: [AuthController],
@@ -18,8 +19,9 @@ import { GenerateAuthTokens } from './providers/generate-auth-tokens';
       provide: HashingProvider,
       useClass: BcryptProvider,
     },
-    SignIn,
-    GenerateAuthTokens,
+    SignInProvider,
+    GenerateAuthTokensProvider,
+    RefreshTokensProvider,
   ],
   imports: [
     forwardRef(() => UserModule),

@@ -102,6 +102,9 @@ export class UserService {
     } catch (error) {
       throw new RequestTimeoutException(
         'Unable to process your request at the moment',
+        {
+          description: String(error),
+        },
       );
     }
 
