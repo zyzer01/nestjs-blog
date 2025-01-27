@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Post } from './entities/post.entity';
 import { TagModule } from '../tag/tag.module';
 import { PaginationModule } from 'src/common/pagination/pagination.module';
+import { CreatePostProvider } from './providers/create-post-provider';
 
 @Module({
   imports: [
@@ -15,6 +16,6 @@ import { PaginationModule } from 'src/common/pagination/pagination.module';
     TypeOrmModule.forFeature([Post]),
   ],
   controllers: [PostController],
-  providers: [PostService],
+  providers: [PostService, CreatePostProvider],
 })
 export class PostModule {}

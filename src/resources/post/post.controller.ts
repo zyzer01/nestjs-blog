@@ -14,6 +14,8 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { GetPostsDto } from './dto/get-posts.dto';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { ICurrentUser } from '../auth/interfaces/current-user.interface';
 
 @Controller('post')
 export class PostController {
@@ -27,9 +29,12 @@ export class PostController {
     type: CreatePostDto,
   })
   @ApiOperation({ summary: 'Create a new blog post' })
-  create(@Body() createPostDto: CreatePostDto) {
-    console.log(createPostDto);
-    return this.postService.create(createPostDto);
+  create(
+    @Body() createPostDto: CreatePostDto,
+    @CurrentUser('sub') currentUser: ICurrentUser,
+  ) {
+    console.log(currentUser);
+    return this.postService.create(createPostDto, currentUser);
   }
 
   // @Get()

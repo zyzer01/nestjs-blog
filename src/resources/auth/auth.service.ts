@@ -1,4 +1,4 @@
-import { HashingProvider } from 'src/resources/auth/provider/hashing.provider';
+import { HashingProvider } from 'src/resources/auth/providers/hashing.provider';
 import {
   forwardRef,
   Inject,
@@ -11,6 +11,7 @@ import { SignInDto } from './dto/sign-in.dto';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigType } from '@nestjs/config';
 import jwtConfig from 'src/config/jwt.config';
+import { ICurrentUser } from './interfaces/current-user.interface';
 
 @Injectable()
 export class AuthService {
@@ -53,7 +54,7 @@ export class AuthService {
       {
         sub: user.id,
         email: user.email,
-      },
+      } as ICurrentUser,
       {
         audience: this.jwtConfiguration.audience,
         issuer: this.jwtConfiguration.issuer,

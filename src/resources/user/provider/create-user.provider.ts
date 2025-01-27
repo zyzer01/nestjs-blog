@@ -9,7 +9,7 @@ import { CreateUserDto } from '../dto/create-user.dto';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user.entity';
-import { HashingProvider } from 'src/resources/auth/provider/hashing.provider';
+import { HashingProvider } from 'src/resources/auth/providers/hashing.provider';
 
 @Injectable()
 export class CreateUserProvider {

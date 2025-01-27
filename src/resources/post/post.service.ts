@@ -1,3 +1,4 @@
+import { CreatePostProvider } from './providers/create-post-provider';
 import {
   BadRequestException,
   Injectable,
@@ -14,6 +15,7 @@ import { ConfigService } from '@nestjs/config';
 import { GetPostsDto } from './dto/get-posts.dto';
 import { PaginationProvider } from 'src/common/pagination/provider/pagination.provider';
 import { Paginated } from 'src/common/pagination/interfaces/paginated.interface';
+import { ICurrentUser } from '../auth/interfaces/current-user.interface';
 
 /**
  * Post Service (Manages all operations related to posts)
@@ -35,23 +37,15 @@ export class PostService {
     private readonly paginationProvider: PaginationProvider,
 
     private readonly userService: UserService,
+
+    private readonly createPostProvider: CreatePostProvider,
   ) {}
 
   /**
    * Create a new post
    */
-  public async create(createPostDto: CreatePostDto) {
-    const author = await this.userService.findOneById(createPostDto.authorId);
-
-    const tags = await this.tagService.findMultipleTags(createPostDto.tags);
-
-    const post = this.postRepository.create({
-      ...createPostDto,
-      author,
-      tags,
-    });
-
-    return this.postRepository.save(post);
+  public async create(createPostDto: CreatePostDto, user: ICurrentUser) {
+    return await this.createPostProvider.create(createPostDto, user);
   }
 
   /**

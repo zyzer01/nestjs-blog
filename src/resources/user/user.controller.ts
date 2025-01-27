@@ -15,12 +15,15 @@ import {
   Query,
 } from '@nestjs/common';
 import { CreateManyUsersDto } from './dto/create-many-users.dto';
+import { Auth } from 'src/resources/auth/decorators/auth.decorator';
+import { AuthType } from 'src/resources/auth/enums/auth-type.enum';
 
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
+  @Auth(AuthType.None)
   public createUser(@Body() createUserDto: CreateUserDto) {
     return this.userService.createUser(createUserDto);
   }

@@ -103,15 +103,6 @@ export class CreatePostDto {
   @IsArray()
   tags?: number[];
 
-  @ApiProperty({
-    type: 'integer',
-    required: true,
-    description: 'The ID of the post author',
-    example: 6,
-  })
-  @IsInt()
-  authorId: number;
-
   @ApiPropertyOptional({
     description: 'The meta options of the post',
     type: 'object',

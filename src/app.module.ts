@@ -1,3 +1,4 @@
+import { AuthenticationGuard } from './resources/auth/guards/authentication/authentication.guard';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -12,6 +13,10 @@ import { PaginationModule } from './common/pagination/pagination.module';
 import appConfig from './config/app.config';
 import databaseConfig from './config/database.config';
 import environmentValidation from './config/environment.validation';
+import { APP_GUARD } from '@nestjs/core';
+import { AccessTokenGuard } from './resources/auth/guards/access-token/access-token.guard';
+import jwtConfig from './config/jwt.config';
+import { JwtModule } from '@nestjs/jwt';
 
 const ENV = process.env.NODE_ENV;
 
@@ -22,6 +27,8 @@ const ENV = process.env.NODE_ENV;
     AuthModule,
     TagModule,
     MetaOptionModule,
+    ConfigModule.forFeature(jwtConfig),
+    JwtModule.registerAsync(jwtConfig.asProvider()),
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: !ENV ? '.env' : `.env.${ENV}`,
@@ -45,6 +52,13 @@ const ENV = process.env.NODE_ENV;
     PaginationModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthenticationGuard,
+    },
+    AccessTokenGuard,
+  ],
 })
 export class AppModule {}

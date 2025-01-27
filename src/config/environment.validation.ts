@@ -9,4 +9,9 @@ export default Joi.object({
   DATABASE_HOST: Joi.string().required().default('localhost'),
   DATABASE_NAME: Joi.string().required(),
   DATABASE_USERNAME: Joi.string().required(),
+  JWT_SECRET: Joi.string().required(),
+  TOKEN_AUDIENCE: Joi.string().required(),
+  TOKEN_ISSUER: Joi.string().required(),
+  ACCESS_TOKEN_TTL: Joi.number().required(),
+  REFRESH_TOKEN_TTL: Joi.number().required(),
 });

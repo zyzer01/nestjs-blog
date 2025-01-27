@@ -1,17 +1,18 @@
 
 POST http://localhost:3000/post
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjE0LCJlbWFpbCI6ImRldnp5ekBnbWFpbC5jb20iLCJpYXQiOjE3Mzc5OTgyODcsImV4cCI6MTczODAwMTg4NywiYXVkIjoibG9jYWxob3N0OjMwMDAiLCJpc3MiOiJsb2NhbGhvc3Q6MzAwMCJ9.1a03XgJxVh_sTMLzwDgcVgEDk2ApRuB5KFwR7sDpeaQ
+
 
 {
     "title": "Tice Post",
     "content": "Nice Post Content",
     "postType": "post",
     "status": "published",
-    "slug": "post-tice",
+    "slug": "post-ce",
     "featuredImage": "https://example.com/image.jpg",
     "publishedOn": "2021-01-01T00:00:00.000Z",
     "tags": [7],
-    "authorId": 1,
     "schema": "{\r\n    \"@context\": \"https:\/\/schema.org\",\r\n    \"@type\": \"Person\"\r\n  }",
     "metaOptions": {
         "metaValue": "{\"sidebarEnable\": true, \"footerActive\": true}"
