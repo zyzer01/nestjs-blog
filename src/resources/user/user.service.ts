@@ -1,5 +1,5 @@
-import { FindOneUserByEmailProvider } from './provider/find-one-user-by-email.provider';
-import { UserCreateManyProvider } from './provider/user-create-many.provider';
+import { FindOneUserByEmailProvider } from './providers/find-one-user-by-email.provider';
+import { UserCreateManyProvider } from './providers/user-create-many.provider';
 import { GetUserParamsDto } from './dto/get-user-params.dto';
 import {
   BadRequestException,
@@ -16,7 +16,8 @@ import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateManyUsersDto } from './dto/create-many-users.dto';
-import { CreateUserProvider } from './provider/create-user.provider';
+import { CreateUserProvider } from './providers/create-user.provider';
+import { FindOneByGoogleIdProvider } from './providers/find-one-by-google-id-provider';
 /**
  * User Service (Manages all operations related to users)
  */
@@ -38,7 +39,15 @@ export class UserService {
      */
     private readonly createUserProvider: CreateUserProvider,
 
+    /**
+     * Inject findByEmail Provider
+     */
     private readonly findOneUserByEmailProvider: FindOneUserByEmailProvider,
+
+    /**
+     * Inject findByGoogleId Provider
+     */
+    private readonly findOneByGoogleIdProvider: FindOneByGoogleIdProvider,
 
     @InjectRepository(User)
     private userRepository: Repository<User>,
@@ -120,5 +129,9 @@ export class UserService {
 
   public async findOneByEmail(email: string) {
     return await this.findOneUserByEmailProvider.findOneByEmail(email);
+  }
+
+  public async findOneByGoogleId(googleId: string) {
+    return await this.findOneByGoogleIdProvider.findOneByGoogleId(googleId);
   }
 }

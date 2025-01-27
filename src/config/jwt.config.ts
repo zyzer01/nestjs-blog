@@ -7,5 +7,7 @@ export default registerAs('jwt', () => {
     issuer: process.env.TOKEN_ISSUER,
     accessTokenTtl: parseInt(process.env.ACCESS_TOKEN_TTL ?? '3600', 10),
     refreshTokenTtl: parseInt(process.env.REFRESH_TOKEN_TTL ?? '86400', 10),
+    googleClientId: process.env.GOOGLE_CLIENT_ID,
+    googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
   };
 });

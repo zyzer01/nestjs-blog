@@ -4,9 +4,11 @@ import { UserService } from './user.service';
 import { AuthModule } from '../auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user.entity';
-import { UserCreateManyProvider } from './provider/user-create-many.provider';
-import { CreateUserProvider } from './provider/create-user.provider';
-import { FindOneUserByEmailProvider } from './provider/find-one-user-by-email.provider';
+import { UserCreateManyProvider } from './providers/user-create-many.provider';
+import { CreateUserProvider } from './providers/create-user.provider';
+import { FindOneUserByEmailProvider } from './providers/find-one-user-by-email.provider';
+import { FindOneByGoogleIdProvider } from './providers/find-one-by-google-id-provider';
+import { CreateGoogleUserProvider } from './providers/create-google-user.provider';
 
 @Module({
   controllers: [UserController],
@@ -15,6 +17,8 @@ import { FindOneUserByEmailProvider } from './provider/find-one-user-by-email.pr
     UserCreateManyProvider,
     CreateUserProvider,
     FindOneUserByEmailProvider,
+    FindOneByGoogleIdProvider,
+    CreateGoogleUserProvider,
   ],
   exports: [UserService],
   imports: [forwardRef(() => AuthModule), TypeOrmModule.forFeature([User])],
