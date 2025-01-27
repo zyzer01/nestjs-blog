@@ -42,6 +42,8 @@ export class GenerateAuthTokensProvider {
       this.signToken(user.id, this.jwtConfiguration.refreshTokenTtl),
     ]);
 
+    console.log({ accessToken, refreshToken });
+
     return { accessToken, refreshToken };
   }
 }

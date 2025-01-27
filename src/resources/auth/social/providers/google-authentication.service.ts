@@ -1,4 +1,10 @@
-import { forwardRef, Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+  OnModuleInit,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { OAuth2Client } from 'google-auth-library';
@@ -42,21 +48,38 @@ export class GoogleAuthenticationService implements OnModuleInit {
   }
 
   public async authenticate(googleTokenDto: GoogleTokenDto) {
-    const loginTicket = await this.oauthClient.verifyIdToken({
-      idToken: googleTokenDto.token,
-    });
+    try {
+      const loginTicket = await this.oauthClient.verifyIdToken({
+        idToken: googleTokenDto.token,
+      });
 
-    const {
-      email,
-      given_name: firstName,
-      family_name: lastName,
-      sub: googleId,
-    } = loginTicket.getPayload();
+      const {
+        email,
+        given_name: firstName,
+        family_name: lastName,
+        sub: googleId,
+      } = loginTicket.getPayload();
 
-    const user = await this.userService.findOneByGoogleId(googleId);
+      const user = await this.userService.findOneByGoogleId(googleId);
 
-    if (user) {
-      return await this.generateAuthTokensProvider.generateTokens(user);
+      if (user) {
+        return await this.generateAuthTokensProvider.generateTokens(user);
+      }
+
+      const newUser = await this.userService.createGoogleUser({
+        email: email,
+        firstName: firstName,
+        lastName: lastName,
+        googleId: googleId,
+      });
+
+      console.log(newUser);
+
+      return await this.generateAuthTokensProvider.generateTokens(newUser);
+    } catch (error) {
+      throw new UnauthorizedException(error, {
+        description: 'Could not authenticate with google',
+      });
     }
   }
 }

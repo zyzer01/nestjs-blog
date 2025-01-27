@@ -8,6 +8,10 @@ import { AuthType } from '../enums/auth-type.enum';
 export class GoogleAuthenticationController {
   constructor(
     private readonly googleAuthenticationService: GoogleAuthenticationService,
+
+    /**
+     * Inject create google user provider
+     */
   ) {}
 
   @Post()

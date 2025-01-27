@@ -18,6 +18,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateManyUsersDto } from './dto/create-many-users.dto';
 import { CreateUserProvider } from './providers/create-user.provider';
 import { FindOneByGoogleIdProvider } from './providers/find-one-by-google-id-provider';
+import { CreateGoogleUserProvider } from './providers/create-google-user.provider';
+import { IGoogleUser } from './interfaces/google-user.interface';
 /**
  * User Service (Manages all operations related to users)
  */
@@ -33,6 +35,12 @@ export class UserService {
      */
 
     private readonly userCreateManyProvider: UserCreateManyProvider,
+
+    /**
+     * Inject createGoogleUser provider
+     */
+
+    private readonly createGoogleUserProvider: CreateGoogleUserProvider,
 
     /**
      * Inject createUser Provider
@@ -63,6 +71,9 @@ export class UserService {
     return this.createUserProvider.createUser(createUserDto);
   }
 
+  public async createGoogleUser(googleUser: IGoogleUser) {
+    return await this.createGoogleUserProvider.createGoogleUser(googleUser);
+  }
   /**
    *
    * @returns all users
@@ -96,6 +107,20 @@ export class UserService {
         description: 'Occured because api endoint was moved',
       },
     );
+  }
+
+  /**
+   *
+   * @param id
+   * @returns all users in the database
+   */
+
+  public async findAllUsers(
+    getUserParamsDto: GetUserParamsDto,
+    limit: number,
+    page: number,
+  ) {
+    return await this.userRepository.find();
   }
 
   /**

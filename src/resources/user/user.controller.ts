@@ -5,6 +5,7 @@ import { PatchUserDto } from './dto/patch-user.dto';
 import { UserService } from './user.service';
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   DefaultValuePipe,
   Get,
@@ -13,6 +14,7 @@ import {
   Patch,
   Post,
   Query,
+  UseInterceptors,
 } from '@nestjs/common';
 import { CreateManyUsersDto } from './dto/create-many-users.dto';
 import { Auth } from 'src/resources/auth/decorators/auth.decorator';
@@ -24,6 +26,7 @@ export class UserController {
 
   @Post()
   @Auth(AuthType.None)
+  @UseInterceptors(ClassSerializerInterceptor)
   public createUser(@Body() createUserDto: CreateUserDto) {
     return this.userService.createUser(createUserDto);
   }
@@ -55,12 +58,14 @@ export class UserController {
     description: 'Specify the page number',
     example: 1,
   })
+  @Auth(AuthType.None)
+  @UseInterceptors(ClassSerializerInterceptor)
   getUsers(
     @Param() getUserParamsDto: GetUserParamsDto,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
   ) {
-    return this.userService.findAll(getUserParamsDto, limit, page);
+    return this.userService.findAllUsers(getUserParamsDto, limit, page);
   }
 
   @Patch('/:id')
