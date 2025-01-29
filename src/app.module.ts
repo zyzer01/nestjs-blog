@@ -18,6 +18,9 @@ import { AccessTokenGuard } from './resources/auth/guards/access-token/access-to
 import jwtConfig from './config/jwt.config';
 import { JwtModule } from '@nestjs/jwt';
 import { DataResponseInterceptor } from './common/interceptors/data-response/data-response.interceptor';
+import { FileUploadModule } from './resources/file-upload/file-upload.module';
+import { MailModule } from './resources/mail/mail.module';
+import { MailService } from './resources/mail/mail.service';
 
 const ENV = process.env.NODE_ENV;
 
@@ -51,6 +54,8 @@ const ENV = process.env.NODE_ENV;
       }),
     }),
     PaginationModule,
+    FileUploadModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [
@@ -64,6 +69,7 @@ const ENV = process.env.NODE_ENV;
       useClass: DataResponseInterceptor,
     },
     AccessTokenGuard,
+    MailService,
   ],
 })
 export class AppModule {}

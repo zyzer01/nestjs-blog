@@ -3,15 +3,12 @@ import { UserCreateManyProvider } from './providers/user-create-many.provider';
 import { GetUserParamsDto } from './dto/get-user-params.dto';
 import {
   BadRequestException,
-  forwardRef,
   HttpException,
   HttpStatus,
-  Inject,
   Injectable,
   RequestTimeoutException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { AuthService } from '../auth/auth.service';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -27,9 +24,6 @@ import { IGoogleUser } from './interfaces/google-user.interface';
 @Injectable()
 export class UserService {
   constructor(
-    @Inject(forwardRef(() => AuthService))
-    private readonly authService: AuthService,
-
     /**
      * Inject createManyUsers Provider
      */
