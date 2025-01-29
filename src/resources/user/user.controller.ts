@@ -1,76 +1,50 @@
-import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
-import { CreateUserDto } from './dto/create-user.dto';
-import { GetUserParamsDto } from './dto/get-user-params.dto';
-import { PatchUserDto } from './dto/patch-user.dto';
-import { UserService } from './user.service';
-import {
-  Body,
-  ClassSerializerInterceptor,
-  Controller,
-  DefaultValuePipe,
-  Get,
-  Param,
-  ParseIntPipe,
-  Patch,
-  Post,
-  Query,
-  UseInterceptors,
-} from '@nestjs/common';
-import { CreateManyUsersDto } from './dto/create-many-users.dto';
-import { Auth } from 'src/resources/auth/decorators/auth.decorator';
-import { AuthType } from 'src/resources/auth/enums/auth-type.enum';
+import { Controller, Get, Param, Patch, Post, Body } from '@nestjs/common';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { PostService } from '../post/post.service';
+import { CreatePostDto } from '../post/dto/create-post.dto';
+import { UpdatePostDto } from '../post/dto/update-post.dto';
 
 @Controller('users')
+@ApiTags('Users')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    /*
+     *  Injecting Posts Service
+     */
+    private readonly postService: PostService,
+  ) {}
 
-  @Post()
-  @Auth(AuthType.None)
-  @UseInterceptors(ClassSerializerInterceptor)
-  public createUser(@Body() createUserDto: CreateUserDto) {
-    return this.userService.createUser(createUserDto);
+  /*
+   * GET localhost:3000/posts/:userId
+   */
+  @Get('/:userId?')
+  public getPosts(@Param('userId') userId: string) {
+    return this.postService.findAll(userId);
   }
 
-  @Post('create-many')
-  public createManyUsers(@Body() createManyUsersDto: CreateManyUsersDto) {
-    return this.userService.createMany(createManyUsersDto);
-  }
-
-  @Get()
   @ApiOperation({
-    summary: 'Get a user by their id',
+    summary: 'Creates a new post for the blog.',
+  })
+  @ApiResponse({
+    status: 201,
+    description:
+      'You get a success 201 response if the post is created successfully',
+  })
+  @Post()
+  public createPost(@Body() createPostDto: CreatePostDto) {
+    console.log(createPostDto);
+  }
+
+  @ApiOperation({
+    summary: 'Updates and existing blog post in the database.',
   })
   @ApiResponse({
     status: 200,
-    description: 'The user has been successfully retrieved.',
+    description:
+      'You get a success 20o response if the post is updated successfully',
   })
-  @ApiQuery({
-    name: 'limit',
-    required: false,
-    type: Number,
-    description: 'Limit the number of users',
-    example: 10,
-  })
-  @ApiQuery({
-    name: 'page',
-    required: false,
-    type: Number,
-    description: 'Specify the page number',
-    example: 1,
-  })
-  @Auth(AuthType.None)
-  @UseInterceptors(ClassSerializerInterceptor)
-  getUsers(
-    @Param() getUserParamsDto: GetUserParamsDto,
-    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
-    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
-  ) {
-    return this.userService.findAllUsers(getUserParamsDto, limit, page);
-  }
-
-  @Patch('/:id')
-  patchUser(@Body() patchUserDto: PatchUserDto) {
-    console.log(patchUserDto);
-    return 'user is patched';
+  @Patch()
+  public updatePost(@Body() patchPostsDto: UpdatePostDto) {
+    console.log(patchPostsDto);
   }
 }

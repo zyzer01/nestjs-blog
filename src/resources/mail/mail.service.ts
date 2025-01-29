@@ -1,7 +1,7 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
 import { ISendMail } from './interfaces/mail.interface';
-import { User } from '../user/user.entity';
+import { User } from '../user/user.schema';
 
 @Injectable()
 export class MailService {

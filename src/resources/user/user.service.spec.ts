@@ -7,7 +7,7 @@ import { FindOneUserByEmailProvider } from './providers/find-one-user-by-email.p
 import { FindOneByGoogleIdProvider } from './providers/find-one-by-google-id-provider';
 import { DataSource } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { User } from './user.entity';
+import { User } from './user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 
 describe('UserService', () => {

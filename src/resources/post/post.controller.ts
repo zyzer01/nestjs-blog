@@ -21,52 +21,52 @@ import { ICurrentUser } from '../auth/interfaces/current-user.interface';
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
-  @Post()
-  @ApiResponse({
-    status: 201,
-    description:
-      'You get a 201 response status if blog post is created successfully',
-    type: CreatePostDto,
-  })
-  @ApiOperation({ summary: 'Create a new blog post' })
-  create(
-    @Body() createPostDto: CreatePostDto,
-    @CurrentUser('sub') currentUser: ICurrentUser,
-  ) {
-    console.log(currentUser);
-    return this.postService.create(createPostDto, currentUser);
-  }
-
-  // @Get()
-  // findAll() {
-  //   return this.postService.findAll();
+  // @Post()
+  // @ApiResponse({
+  //   status: 201,
+  //   description:
+  //     'You get a 201 response status if blog post is created successfully',
+  //   type: CreatePostDto,
+  // })
+  // @ApiOperation({ summary: 'Create a new blog post' })
+  // create(
+  //   @Body() createPostDto: CreatePostDto,
+  //   @CurrentUser('sub') currentUser: ICurrentUser,
+  // ) {
+  //   console.log(currentUser);
+  //   return this.postService.create(createPostDto, currentUser);
   // }
 
-  @Get()
-  findOne(@Query() postquery?: GetPostsDto) {
-    return this.postService.findAll(postquery);
-  }
+  // // @Get()
+  // // findAll() {
+  // //   return this.postService.findAll();
+  // // }
 
   // @Get()
-  // findAll() {
-  //   return this.postService.findAll();
+  // findOne(@Query() postquery?: GetPostsDto) {
+  //   return this.postService.findAll(postquery);
   // }
 
-  @Patch('/:id')
-  @ApiResponse({
-    status: 200,
-    description:
-      'You get a 200 response status if blog post was updated successfully',
-    type: CreatePostDto,
-  })
-  @ApiOperation({ summary: 'Updates a blog post' })
-  update(@Param('id') id: number, @Body() updatePostDto: UpdatePostDto) {
-    console.log(updatePostDto);
-    return this.postService.update(id, updatePostDto);
-  }
+  // // @Get()
+  // // findAll() {
+  // //   return this.postService.findAll();
+  // // }
 
-  @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.postService.remove(id);
-  }
+  // @Patch('/:id')
+  // @ApiResponse({
+  //   status: 200,
+  //   description:
+  //     'You get a 200 response status if blog post was updated successfully',
+  //   type: CreatePostDto,
+  // })
+  // @ApiOperation({ summary: 'Updates a blog post' })
+  // update(@Param('id') id: number, @Body() updatePostDto: UpdatePostDto) {
+  //   console.log(updatePostDto);
+  //   return this.postService.update(id, updatePostDto);
+  // }
+
+  // @Delete(':id')
+  // remove(@Param('id', ParseIntPipe) id: number) {
+  //   return this.postService.remove(id);
+  // }
 }

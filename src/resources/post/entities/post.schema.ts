@@ -1,7 +1,7 @@
 import { MetaOption } from 'src/resources/meta-option/entities/meta-option.entity';
 import { CreateMetaOptionDto } from '../../meta-option/dto/create-meta-option.dto';
 import { PostStatus } from '../enum/post-status.enum';
-import { PostType } from './../enum/post-type.enum';
+import { PostType } from '../enum/post-type.enum';
 import {
   Column,
   Entity,
@@ -11,8 +11,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from 'src/resources/user/user.entity';
-import { Tag } from 'src/resources/tag/entities/tag.entity';
+import { User } from 'src/resources/user/user.schema';
 
 @Entity()
 export class Post {
@@ -75,11 +74,6 @@ export class Post {
   })
   publishedOn?: Date;
 
-  @ManyToMany(() => Tag, (tag) => tag.post)
-  @JoinTable()
-  tags?: Tag[];
-
-  @ManyToOne(() => User, (user) => user.post)
   author: User;
 
   @OneToOne(() => MetaOption, (metaOption) => metaOption.post, {
